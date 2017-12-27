@@ -1,32 +1,33 @@
 %{
     open Proof
+    open Core
 %}
 
 
 %token <char> VAR
+%token <string> STRING
+%token GOAL PROOF END
 %token AND OR NEG IMP EQ
 %token LPAREN RPAREN
-%token EOF
-(* %token GOAL
-%token PROOF
-%token END
 %token LBRACK RBRACK
-%token COLON
-%token SEMICOLON *)
+%token COLON SEMICOLON 
+%token EOF
 
 %right EQ  (* Lowest Precedence *)
 %right IMP      
 %left AND OR 
 %nonassoc NEG  (* Highest Precedence *)
 
-
-%start <Proof.formula option> prog
+%start <Proof.proof option> prog
 
 %%
 
 prog: 
-    | f = formula EOF  { Some f }
+    | f = goal EOF     { Some f }
     | EOF              { None   } ;
+
+goal:
+    | GOAL; n = STRING; COLON; f = formula; PROOF; END { {name = n; goal = f; proof = []}}
 
 formula: 
     | f1 = formula; EQ; f2 = formula  { Eq (f1,f2) }

@@ -14,12 +14,21 @@ let next_line lexbuf =
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 let letter = ['a'-'z' 'A'-'Z']
+let name = ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z']+
 
 rule read =
     parse 
     | white    { read lexbuf }
     | newline  { next_line lexbuf; read lexbuf }
     | letter   { VAR (Lexing.lexeme lexbuf).[0] }
+    | "goal"   { GOAL }
+    | "proof"  { PROOF }
+    | "end."   { END }
+    | name     { STRING (Lexing.lexeme lexbuf) }
+    | ":"      { COLON }
+    | ";"      { SEMICOLON }
+    | "["      { LBRACK }
+    | "]"      { RBRACK }
     | "("      { LPAREN }
     | ")"      { RPAREN }
     | "/\\"    { AND }
@@ -27,8 +36,8 @@ rule read =
     | "~"      { NEG }
     | "=>"     { IMP }
     | "<=>"    { EQ }
+    | eof      { EOF }
     | _ { raise (SyntaxError 
         ("Unexpected char: " ^ Lexing.lexeme lexbuf)) }
-    | eof      { EOF }
 
 
