@@ -7,8 +7,8 @@ type formula =
 	| Eq of (formula * formula)
 
 type premise = 
-	| FORMULA of formula
-	| FRAME of formula * (premise list)
+	| Formula of formula
+	| Frame of formula * (premise list)
 
 type proof =
 	{ name : string;
@@ -17,8 +17,20 @@ type proof =
 
 open Core
 
-let rec proof_value outc = function
-	{ name; goal; proof } -> printf "goal %s: %a\n" name formula_value goal
+let rec output_value outc = function
+	{ name; goal; proof } -> printf "goal %s: %a\nproof\n%aend." 
+		name formula_value goal proof_value proof
+
+and proof_value outc = function
+	| [] -> ()
+	| (Formula f)::[]  -> printf "%a"
+		formula_value f
+	| (Formula f)::t   -> printf "%a;\n%a" 
+		formula_value f proof_value t
+	| (Frame (f,p))::[] -> printf "[ %a :\n%a ]"
+		formula_value f proof_value p
+	| (Frame (f,p))::t -> printf "[ %a :\n%a ];\n%a\n"
+		formula_value f proof_value p proof_value t
 
 and formula_value outc = function
 	| Lit x     -> printf "%c" x
