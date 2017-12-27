@@ -1,0 +1,14 @@
+goal test3: (p \/ q => r) => (p => r) /\ (q => r)
+proof
+  [ p\/q=>r : 
+  	[ p :
+  	  p\/q;
+  	  r ];
+  	p => r;
+  	[ q :
+  	  p\/q;
+  	  r ];
+  	q => r;
+  	(p => r) /\ (q => r) ];
+  (p \/ q => r) => (p => r) /\ (q => r)
+end.

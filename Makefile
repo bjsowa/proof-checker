@@ -1,4 +1,4 @@
-.PHONY: all clean
+.PHONY: all test clean
 
 TAGS = -tag thread
 PKGS = -pkg core
@@ -8,8 +8,10 @@ OUT = test.native
 all:
 	ocamlbuild $(FLAGS) $(OUT)
 
-# test: all
-# 	cram tests/tests.t
+TESTS=test1.t test2.t test3.t fail.t
+test: all
+	cd tests; \
+	cram -v $(TESTS)
 
 clean:
 	rm -rf _build 
