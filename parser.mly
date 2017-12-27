@@ -14,9 +14,10 @@
 %token COLON
 %token SEMICOLON *)
 
-%right IMP EQ   (* Lowest Precedence *)
-%left AND OR    (* Medium Precedence *)
-%nonassoc NEG   (* Highest Precedence *)
+%right EQ  (* Lowest Precedence *)
+%right IMP      
+%left AND OR 
+%nonassoc NEG  (* Highest Precedence *)
 
 
 %start <Proof.formula option> prog
