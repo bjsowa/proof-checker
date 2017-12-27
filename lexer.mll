@@ -14,7 +14,7 @@ let next_line lexbuf =
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
 let letter = ['a'-'z' 'A'-'Z']
-let name = ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z']+
+let name = ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9']+
 
 rule read =
     parse 

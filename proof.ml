@@ -18,7 +18,7 @@ type proof =
 open Core
 
 let rec output_value outc = function
-	{ name; goal; proof } -> printf "goal %s: %a\nproof\n%aend." 
+	{ name; goal; proof } -> printf "goal %s: %a\nproof\n%a\nend." 
 		name formula_value goal proof_value proof
 
 and proof_value outc = function
@@ -29,7 +29,7 @@ and proof_value outc = function
 		formula_value f proof_value t
 	| (Frame (f,p))::[] -> printf "[ %a :\n%a ]"
 		formula_value f proof_value p
-	| (Frame (f,p))::t -> printf "[ %a :\n%a ];\n%a\n"
+	| (Frame (f,p))::t -> printf "[ %a :\n%a ];\n%a"
 		formula_value f proof_value p proof_value t
 
 and formula_value outc = function
