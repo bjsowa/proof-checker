@@ -3,6 +3,7 @@
 Lexer error:
   $ $PARSECMD $TESTDIR/fail1.pf
   *tests/fail1.pf:5:*: Unexpected char: . (glob)
+  [1]
 
 Parser error:
   $ $PARSECMD $TESTDIR/fail2.pf

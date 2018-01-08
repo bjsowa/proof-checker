@@ -18,13 +18,12 @@
 %left AND OR 
 %nonassoc NEG  (* Highest Precedence *)
 
-%start <Proof.proof option> prog
+%start <Proof.proof list> prog
 
 %%
 
 prog: 
-    | f = goal EOF     { Some f }
-    | EOF              { None   } ;
+    | f = list(goal); EOF   { f }
 
 goal:
     | GOAL; n = STRING; COLON; f = formula; PROOF; p = proof; END 

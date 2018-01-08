@@ -1,0 +1,28 @@
+goal test1: A /\ (A => B) => B
+proof
+  [ A /\ (A => B) :
+    A;
+    A => B;
+    B ];
+  A /\ (A => B) => B
+end.
+goal test2: A => B => A
+proof
+  [ A : [ B : A];
+  		 B => A];
+    A => B => A
+end.
+goal test3: (p \/ q => r) => (p => r) /\ (q => r)
+proof
+  [ p\/q=>r : 
+  	[ p :
+  	  p\/q;
+  	  r ];
+  	p => r;
+  	[ q :
+  	  p\/q;
+  	  r ];
+  	q => r;
+  	(p => r) /\ (q => r) ];
+  (p \/ q => r) => (p => r) /\ (q => r)
+end.
