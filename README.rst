@@ -24,23 +24,7 @@ Wystarczy użyć dołączonego pliku makefile wpisując w konsoli:
 
 Jak używać
 ----------
-``./test.native [NAZWA_PLIKU]``
-
-Aktualny stan projektu
-----------------------
-W tej chwili mam działający parser
-
-Plany dalszej pracy
--------------------
-1. Parsowanie więcej niż jednego dowodu z jednego pliku
-2. Funkcja sprawdzająca czy dwie formuły są izomorficzne
-3. Funkcja tworząca listę możliwych produkcji z dostępnych przesłanek
-4. Sprawdzanie poprawności dowodów
-
-   - sprawdzanie czy dana produkcja może być otrzymana z dostępnych przesłanek  
-   - przekazywanie dostępnych przesłanek do następnego elementu
-   - zadbanie o to, żeby przesłanki nie były dostępne na zewnątrz ramki
-   - wypisywanie błędów wraz z miejscem ich wystąpienia (trzeba jakoś zapamiętać te miejsca)
+``./main.native [NAZWA_PLIKU]``
 
 .. _OCaml: http://caml.inria.fr
 .. _Core: https://opam.ocaml.org/packages/core/core.113.33.03/
