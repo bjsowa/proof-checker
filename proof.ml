@@ -17,7 +17,7 @@ type proof =
 	  goal : formula;
 	  proof: premise list; }
 
-let equal f1 f2 = 
+let formula_equal f1 f2 = 
 	f1 = f2
 
 let rec output_value outc = function
