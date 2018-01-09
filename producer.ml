@@ -46,5 +46,15 @@ let orE premises form = match form with
 		else []
 	| _ -> []
 
+let remove_duplicates premises =
+	List.fold premises ~init:[]
+		~f:(fun acc p1 -> if List.exists acc 
+			~f:(fun p2 -> formula_equal p1 p2)
+			then acc else p1::acc)
+
 let produce premises form = 
-	andE form @ impE1 premises form @ impE2 premises form @ orE premises form
+	remove_duplicates @@
+		andE form @ 
+		impE1 premises form @ 
+		impE2 premises form @ 
+		orE premises form
