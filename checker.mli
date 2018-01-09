@@ -1,0 +1,1 @@
+val check_proof : Proof.proof -> unit
