@@ -3,7 +3,7 @@
 TAGS = -tag thread
 PKGS = -pkg core
 FLAGS = -use-menhir -use-ocamlfind $(TAGS) $(PKGS)
-OUT = test.native
+OUT = main.native
 
 all:
 	ocamlbuild $(FLAGS) $(OUT)
