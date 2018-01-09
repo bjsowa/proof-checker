@@ -54,5 +54,11 @@ let produce premises form =
 		impE2 premises form @ 
 		orE premises form
 
-let check_introduction premises form =
-	true
+let check_introduction premises form = match form with
+	| And(a,b) -> 
+		List.exists premises ~f:(fun p -> formula_equal a p) &&
+		List.exists premises ~f:(fun p -> formula_equal b p)
+	| Or(a,b) ->
+		List.exists premises ~f:(fun p -> formula_equal a p) ||
+		List.exists premises ~f:(fun p -> formula_equal b p)
+	| _ -> false
