@@ -1,7 +1,7 @@
 .PHONY: all test clean
 
 TAGS = -tag thread
-PKGS = -pkg core,ppx_sexp_conv,ppx_compare
+PKGS = -pkg core,ppx_sexp_conv
 FLAGS = -use-menhir -use-ocamlfind $(TAGS) $(PKGS)
 OUT = main.native
 
