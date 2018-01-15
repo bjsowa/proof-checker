@@ -62,23 +62,50 @@ let falseI premises form =
 			else FormulaSet.empty
 		| _ -> FormulaSet.empty
 
+let negE form = match form with
+	| Neg(f) -> FormulaSet.singleton (Imp(f,False))
+	| _ -> FormulaSet.empty
+
+let negI form = match form with
+	| Imp(a,False) -> FormulaSet.singleton (Neg(a))
+	| _ -> FormulaSet.empty
+
+let negnegE form = match form with
+	| Neg(Neg f) -> FormulaSet.singleton f
+	| _ -> FormulaSet.empty
+
+let raa form = match form with
+	| Imp(Neg(f),False) -> FormulaSet.singleton f
+	| _ -> FormulaSet.empty
+
+let negnegI form =
+	FormulaSet.singleton (Neg(Neg form))
+
 let produce premises form = 
 	andE form $@
 	impEl premises form $@
 	impEr premises form $@
 	orE premises form $@
 	eqE premises form $@
-	eqI premises form
+	eqI premises form $@
+	falseI premises form $@
+	negE form $@
+	negI form $@
+	negnegE form $@
+	negnegI form $@
+	raa form
 
 let check_introduction premises form = 
-	if FormulaSet.mem premises False 
+	if FormulaSet.mem premises False  (* falseE *)
 	then true else match form with
-	| And(a,b) ->
+	| And(a,b) ->					  (* andI *)
 		FormulaSet.mem premises a &&
 		FormulaSet.mem premises b
-	| Or(a,b) ->
+	| Or(Neg a, b) 					  (* magic *)
+	| Or(a, Neg b) -> a = b
+	| Or(a,b) ->					  (* orI *)
 		FormulaSet.mem premises a ||
 		FormulaSet.mem premises b
-	| Eq(a,b) -> a = b
-	| True -> true
+	| Eq(a,b) -> a = b 				  (* eqI1 *)
+	| True -> true 					  (* trueI *)
 	| _ -> false
