@@ -16,9 +16,3 @@ let parse_with_error lexbuf =
     | Parser.Error ->
         fprintf stderr "%a: syntax error\n" print_position lexbuf;
         exit (1)
-
-let remove_duplicates premises =
-	List.fold premises ~init:[]
-		~f:(fun acc p1 -> if List.exists acc 
-			~f:(fun p2 -> formula_equal p1 p2)
-			then acc else p1::acc)
