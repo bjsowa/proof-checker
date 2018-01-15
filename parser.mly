@@ -8,6 +8,7 @@
 %token <string> STRING
 %token GOAL PROOF END
 %token AND OR NEG IMP EQ
+%token TRUE FALSE
 %token LPAREN RPAREN
 %token LBRACK RBRACK
 %token COLON SEMICOLON 

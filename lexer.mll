@@ -13,17 +13,19 @@ let next_line lexbuf =
 
 let white = [' ' '\t']+
 let newline = '\r' | '\n' | "\r\n"
-let letter = ['a'-'z' 'A'-'Z']
+let letter = ['a'-'z' 'A'-'E' 'G'-'S' 'U'-'Z']
 let name = ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9']+
 
 rule read =
     parse 
     | white    { read lexbuf }
     | newline  { next_line lexbuf; read lexbuf }
-    | letter   { VAR (Lexing.lexeme lexbuf).[0] }
     | "goal"   { GOAL }
     | "proof"  { PROOF }
     | "end."   { END }
+    | "T"      { TRUE }
+    | "F"      { FALSE }
+    | letter   { VAR (Lexing.lexeme lexbuf).[0] }
     | name     { STRING (Lexing.lexeme lexbuf) }
     | ":"      { COLON }
     | ";"      { SEMICOLON }

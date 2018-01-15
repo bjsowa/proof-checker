@@ -7,6 +7,7 @@ type formula =
 	| Or of (formula * formula)
 	| Imp of (formula * formula)
 	| Eq of (formula * formula)
+	| True | False
 [@@deriving sexp]
 
 type premise = 
@@ -60,3 +61,5 @@ and formula_value outc = function
 	| Or (x,y)  -> fprintf outc "(%a)\\/(%a)" formula_value x formula_value y
 	| Imp (x,y) -> fprintf outc "(%a)=>(%a)" formula_value x formula_value y
 	| Eq (x,y)  -> fprintf outc "(%a)<=>(%a)" formula_value x formula_value y
+	| True		-> fprintf outc "T"
+	| False 	-> fprintf outc "F"
