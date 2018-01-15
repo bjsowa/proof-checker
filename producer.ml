@@ -101,10 +101,12 @@ let check_introduction premises form =
 	| And(a,b) ->					  (* andI *)
 		FormulaSet.mem premises a &&
 		FormulaSet.mem premises b
-	| Or(Neg a, b) 					  (* magic *)
-	| Or(a, Neg b) -> a = b
-	| Or(a,b) ->					  (* orI *)
-		FormulaSet.mem premises a ||
+	| Or(a,b) -> 
+		(match (a,b) with			  (* magic *)
+		| (Neg f1, f2)
+		| (f1, Neg f2) -> f1 = f2
+		| _ -> false) ||
+		FormulaSet.mem premises a ||  (* orI *)
 		FormulaSet.mem premises b
 	| Eq(a,b) -> a = b 				  (* eqI1 *)
 	| True -> true 					  (* trueI *)
