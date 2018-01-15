@@ -81,4 +81,5 @@ let check_introduction premises form = match form with
 	| Or(a,b) ->
 		FormulaSet.mem premises a ||
 		FormulaSet.mem premises b
+	| Eq(a,b) -> a = b
 	| _ -> false
