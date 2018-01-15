@@ -19,7 +19,7 @@ let rec frame premises products = function
 	| (Frame (f,p))::t ->
 		let goal = frame (FormulaSet.add premises f) (products $@ (produce premises f)) p in
 		let newf = Imp(f,goal) in
-			frame (FormulaSet.add premises newf) (products $@ (produce premises newf)) t
+		frame premises (FormulaSet.add products newf) t
 	| _ -> raise (ProofError (Lit 'x'))
 
 let check_proof p = match p with
