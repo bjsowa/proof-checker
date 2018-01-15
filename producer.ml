@@ -52,6 +52,16 @@ let eqI premises form = match form with
 		else FormulaSet.empty
 	| _ -> FormulaSet.empty
 
+let falseI premises form = 
+	if FormulaSet.mem premises (Neg(form))
+	then FormulaSet.singleton False
+	else match form with
+		| Neg(f) -> 
+			if FormulaSet.mem premises f
+			then FormulaSet.singleton False
+			else FormulaSet.empty
+		| _ -> FormulaSet.empty
+
 let produce premises form = 
 	andE form $@
 	impEl premises form $@
@@ -60,7 +70,9 @@ let produce premises form =
 	eqE premises form $@
 	eqI premises form
 
-let check_introduction premises form = match form with
+let check_introduction premises form = 
+	if FormulaSet.mem premises False 
+	then true else match form with
 	| And(a,b) ->
 		FormulaSet.mem premises a &&
 		FormulaSet.mem premises b
@@ -68,4 +80,5 @@ let check_introduction premises form = match form with
 		FormulaSet.mem premises a ||
 		FormulaSet.mem premises b
 	| Eq(a,b) -> a = b
+	| True -> true
 	| _ -> false
