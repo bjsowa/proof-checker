@@ -44,5 +44,7 @@ formula:
     | f1 = formula; OR; f2 = formula                { Or (f1,f2) }
     | NEG; f = formula                              { Neg f }
     | LPAREN; f = formula; RPAREN                   { f } 
-    | s = VAR                                       { Lit s } ;
+    | s = VAR                                       { Lit s }
+    | TRUE                                          { True }
+    | FALSE                                         { False };
 
