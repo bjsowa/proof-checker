@@ -26,3 +26,16 @@ proof
   	(p => r) /\ (q => r) ];
   (p \/ q => r) => (p => r) /\ (q => r)
 end.
+goal test4: (p \/ q => r) => (p => r) /\ (q => r)
+proof
+  [ p\/q=>r : 
+    [ p :
+      r ];
+    p => r;
+    [ q :
+      p\/q;
+      r ];
+    q => r;
+    (p => r) /\ (q => r) ];
+  (p \/ q => r) => (p => r) /\ (q => r)
+end.
