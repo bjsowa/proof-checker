@@ -38,6 +38,7 @@ proof
         r];
       q => r];
     p => q => r];
+  (p /\ q => r) => (p => q => r);
   [ p => q => r :
     [ p /\ q :
       p;
@@ -45,5 +46,42 @@ proof
       q => r;
       r ];
     p /\ q => r];
+  (p => q => r) => (p /\ q => r);
   (p /\ q => r) <=> (p => q => r)
+end.
+
+goal negimp: (p => q) /\ ~q => ~p
+proof
+  [ (p => q) /\ ~q :
+    p => q;
+    ~q;
+    q => F;
+    [ p :
+      q;
+      F ];
+    p => F;
+    ~p ];
+  (p => q) /\ ~q => ~p
+end.
+
+goal morgan: ~(p /\ q) => ~q \/ ~p
+proof
+  [ ~(p /\ q) :
+    [ ~(~q \/ ~p) :
+      [ ~q :
+        ~q \/ ~p;
+        F];
+      ~q => F;
+      q;
+      [ ~p :
+        ~q \/ ~p;
+        F];
+      ~p => F;
+      p;
+      p /\ q;
+      F];
+    ~(~q \/ ~p) => F;
+    ~~(~q \/ ~p);
+    ~q \/ ~p ];
+  ~(p /\ q) => ~q \/ ~p
 end.
