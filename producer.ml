@@ -3,62 +3,52 @@ open Core
 open Utilities
 
 let andE form = match form with
-	| And (l,r) -> [l;r]
-	| _ -> []
+	| And (l,r) -> FormulaSet.of_list [l;r]
+	| _ -> FormulaSet.empty
 
-let impE1 premises form = 
-	List.fold premises ~init:[] 
-		~f:(fun acc p -> match p with
-			| Imp(a,b) -> if formula_equal a form then b::acc else acc
-			| _ -> acc)
+let impEl premises form = 
+	FormulaSet.filter_map premises
+		~f:(function 
+			| Imp(a,b) -> if a = form then Some b else None
+			| _ -> None)
 
-let impE2 premises form = match form with
-	| Imp(a,b) -> if List.exists premises 
-		~f:(fun p -> formula_equal p a) then [b] else []
-	| _ -> [] 
+let impEr premises form = match form with
+	| Imp(a,b) -> if FormulaSet.mem premises a
+		then FormulaSet.singleton b else FormulaSet.empty 
+	| _ -> FormulaSet.empty
 
 let orE premises form = match form with
-	| Or(a,b) -> 
-		let imA = List.fold premises ~init:[]
-			~f:(fun acc p -> match p with
-				| Imp(x,c) -> if formula_equal a x then c::acc else acc
-				| _ -> acc)
-		and imB = List.fold premises ~init:[]
-			~f:(fun acc p -> match p with
-				| Imp(x,c) -> if formula_equal b x then c::acc else acc
-				| _ -> acc) in
-		List.fold imA ~init:[]
-			~f:(fun acc p1 -> if List.exists imB
-				~f:(fun p2 -> formula_equal p1 p2) then p1::acc else acc)
+	| Or(a,b) ->
+		let imA = impEl premises a 
+		and imB = impEl premises b in
+		FormulaSet.inter imA imB
 	| Imp(a,b) ->
-		let imA = List.fold premises ~init:[]
-			~f:(fun acc p -> match p with
-				| Imp(c,x) -> if formula_equal b x then c::acc else acc
-				| _ -> acc)
-		and orA = List.fold premises ~init:[]
-			~f:(fun acc p -> match p with
-				| Or(x,y) -> if formula_equal x a then y::acc else
-							 if formula_equal y a then x::acc else acc
-				| _ -> acc) in
-		if List.exists imA 
-			~f:(fun p1 -> List.exists orA
-				~f:(fun p2 -> formula_equal p1 p2))
-		then [b]
-		else []
-	| _ -> []
+		let imA = FormulaSet.filter_map premises
+			~f:(function
+				| Imp(c,d) -> if d = b then Some c else None
+				| _ -> None)
+		and orA = FormulaSet.filter_map premises
+			~f:(function
+				| Or(c,d) -> if c = a then Some d 
+							 else if d = a then Some c
+							 else None
+				| _ -> None) in
+		if not (FormulaSet.is_empty @@ FormulaSet.inter imA orA)
+		then FormulaSet.singleton b
+		else FormulaSet.empty
+	| _ -> FormulaSet.empty
 
 let produce premises form = 
-	remove_duplicates @@
-		andE form @ 
-		impE1 premises form @ 
-		impE2 premises form @ 
-		orE premises form
+	andE form $@
+	impEl premises form $@
+	impEr premises form $@
+	orE premises form
 
 let check_introduction premises form = match form with
-	| And(a,b) -> 
-		List.exists premises ~f:(fun p -> formula_equal a p) &&
-		List.exists premises ~f:(fun p -> formula_equal b p)
+	| And(a,b) ->
+		FormulaSet.mem premises a &&
+		FormulaSet.mem premises b
 	| Or(a,b) ->
-		List.exists premises ~f:(fun p -> formula_equal a p) ||
-		List.exists premises ~f:(fun p -> formula_equal b p)
+		FormulaSet.mem premises a ||
+		FormulaSet.mem premises b
 	| _ -> false

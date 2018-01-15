@@ -1,4 +1,4 @@
 open Proof
 
-val produce : formula list -> formula -> formula list
-val check_introduction : formula list -> formula -> bool
+val produce : FormulaSet.t -> formula -> FormulaSet.t
+val check_introduction : FormulaSet.t -> formula -> bool

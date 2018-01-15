@@ -7,6 +7,7 @@ type formula =
 	| Or of (formula * formula)
 	| Imp of (formula * formula)
 	| Eq of (formula * formula)
+[@@deriving sexp]
 
 type premise = 
 	| Formula of formula
@@ -17,8 +18,25 @@ type proof =
 	  goal : formula;
 	  proof: premise list; }
 
+exception ProofError of formula
+
 let formula_equal f1 f2 = 
 	f1 = f2
+
+module Formula : sig
+	type t = formula [@@deriving sexp]
+	include Comparable.S with type t := t
+end = struct
+	module T = struct
+    	type t = formula [@@deriving sexp]
+  	end
+  	include T
+  	include Comparable.Poly(T)
+end
+
+module FormulaSet = Set.Make(Formula)
+
+let ($@) set1 set2 = FormulaSet.union set1 set2
 
 let rec output_value outc = function
 	{ name; goal; proof } -> fprintf outc "goal %s: %a\nproof\n%a\nend." 
