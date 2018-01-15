@@ -42,21 +42,7 @@ let orE premises form = match form with
 
 let eqE premises form = match form with
 	| Eq(a,b) -> 
-		FormulaSet.filter_map premises
-			~f:(function
-				| Imp(c,d) -> 
-					if c = a then Some(Imp(b,d))
-					else if c = b then Some(Imp(a,d))
-					else None
-				| _ -> None)
-	| Imp(a,b) ->
-		FormulaSet.filter_map premises
-			~f:(function
-				| Eq(c,d) ->
-					if c = a then Some(Imp(d,b))
-					else if d = a then Some(Imp(c,b))
-					else None
-				| _ -> None)
+		FormulaSet.of_list [Imp(a,b);Imp(b,a)]
 	| _ -> FormulaSet.empty
 
 let eqI premises form = match form with
