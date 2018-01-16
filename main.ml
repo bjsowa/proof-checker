@@ -15,7 +15,7 @@ let main filename () =
 
 let () =
     Command.basic 
-        ~summary:"Parse and display logical formulas"
+        ~summary:"Check the correctness of proof of classical logic formula in the natural deduction system"
         Command.Spec.(empty +> anon ("filename" %: file))
         main 
     |> Command.run
