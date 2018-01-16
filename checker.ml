@@ -20,7 +20,7 @@ let rec frame premises products = function
 		let goal = frame (FormulaSet.add premises f) (products $@ (produce premises f)) p in
 		let newf = Imp(f,goal) in
 		frame premises (FormulaSet.add products newf) t
-	| _ -> raise (ProofError (Lit 'x',1))
+	| _ -> raise FrameError
 
 let check_proof p = match p with
 	{ name; goal; proof } -> 
@@ -31,5 +31,7 @@ let check_proof p = match p with
 		then printf "goal %s: proved successfully\n" name
 		else printf "goal %s: not proved\n" name
 	with
-		ProofError (f,l) -> 
+		| ProofError (f,l) -> 
 			fprintf stderr "goal %s: can't produce formula %a (line %d)\n" name formula_value f l
+		| FrameError ->
+			fprintf stderr "goal %s: frame doesn't end with formula\n" name

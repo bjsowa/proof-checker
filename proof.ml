@@ -20,6 +20,7 @@ type proof =
 	  proof: premise list; }
 
 exception ProofError of formula * int
+exception FrameError
 
 module Formula : sig
 	type t = formula [@@deriving sexp]
