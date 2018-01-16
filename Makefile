@@ -8,7 +8,7 @@ OUT = main.native
 all:
 	ocamlbuild $(FLAGS) $(OUT)
 
-TESTS=success_parser.t fail_parser.t success_checker.t 
+TESTS=success_parser.t fail_parser.t success_checker.t fail_checker.t 
 test: all
 	cd tests; \
 	cram -v $(TESTS)
