@@ -25,13 +25,12 @@ let rec frame premises products = function
 let check_proof p = match p with
 	{ name; goal; proof } -> 
 	try 
-		(* printf "%a\n" Proof.output_value p; *)
 		let res = frame FormulaSet.empty FormulaSet.empty proof in
 		if res = goal
 		then printf "goal %s: proved successfully\n" name
 		else printf "goal %s: not proved\n" name
 	with
 		| ProofError (f,l) -> 
-			fprintf stderr "goal %s: can't produce formula %a (line %d)\n" name formula_value f l
+			fprintf stderr "goal %s: can't produce formula %a (line %d)\n" name print_formula f l
 		| FrameError ->
 			fprintf stderr "goal %s: frame doesn't end with formula\n" name

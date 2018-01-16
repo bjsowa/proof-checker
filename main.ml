@@ -10,7 +10,7 @@ let main filename parse () =
 
     let proofs = parse_with_error lexbuf in
     (if parse 
-    then List.iter proofs ~f:(printf "%a\n" Proof.output_value)
+    then List.iter proofs ~f:(printf "%a\n" print_proof)
     else List.iter proofs ~f:(check_proof));
     In_channel.close inx
 
