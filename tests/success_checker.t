@@ -1,6 +1,6 @@
   $ PARSECMD="$TESTDIR/../main.native"
 
-  $ $PARSECMD $TESTDIR/test_success.pf
+  $ $PARSECMD $TESTDIR/success.pf
   goal test1: proved successfully
   goal test2: proved successfully
   goal test3: proved successfully
