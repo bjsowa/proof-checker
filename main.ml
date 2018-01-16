@@ -16,7 +16,7 @@ let main filename parse fill () =
     In_channel.close inx
 
 let () =
-    Command.basic 
+    Command.basic_spec
         ~summary:"Check the correctness of proof of classical logic formula in the natural deduction system"
         Command.Spec.(empty 
             +> anon ("filename" %: file)
@@ -24,11 +24,4 @@ let () =
             +> flag "-fill" (optional int) ~doc:"D fill")
         main 
     |> Command.run
-
-(* open Proof
-
-let () = 
-    let set1 = FormulaSet.of_list [Lit 'x'; Lit 'y'; Lit 'z'] in
-    let set2 = FormulaSet.of_list [Lit 'z'; Lit 'a'] in
-    let diff = FormulaSet.diff set2 set1 in
-    FormulaSet.iter diff ~f:(printf "%a\n" print_formula) *)
+    
