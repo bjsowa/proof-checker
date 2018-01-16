@@ -11,7 +11,7 @@ type formula =
 [@@deriving sexp]
 
 type premise = 
-	| Formula of formula
+	| Formula of formula * int
 	| Frame of formula * (premise list)
 
 type proof =
@@ -19,10 +19,7 @@ type proof =
 	  goal : formula;
 	  proof: premise list; }
 
-exception ProofError of formula
-
-let formula_equal f1 f2 = 
-	f1 = f2
+exception ProofError of formula * int
 
 module Formula : sig
 	type t = formula [@@deriving sexp]
@@ -37,7 +34,7 @@ end
 
 module FormulaSet = Set.Make(Formula)
 
-let ($@) set1 set2 = FormulaSet.union set1 set2
+let ($@) = FormulaSet.union
 
 let rec output_value outc = function
 	{ name; goal; proof } -> fprintf outc "goal %s: %a\nproof\n%a\nend." 
@@ -45,9 +42,9 @@ let rec output_value outc = function
 
 and proof_value outc = function
 	| [] -> ()
-	| (Formula f)::[]  -> fprintf outc "%a"
+	| (Formula (f,_))::[]  -> fprintf outc "%a"
 		formula_value f
-	| (Formula f)::t   -> fprintf outc "%a;\n%a" 
+	| (Formula (f,_))::t   -> fprintf outc "%a;\n%a" 
 		formula_value f proof_value t
 	| (Frame (f,p))::[] -> fprintf outc "[ %a :\n%a ]"
 		formula_value f proof_value p

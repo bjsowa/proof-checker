@@ -1,6 +1,7 @@
 %{
     open Proof
     open Core
+    open Lexing
 %}
 
 
@@ -34,7 +35,7 @@ proof:
     premises = separated_list(SEMICOLON, premise)   { premises }
 
 premise:
-    | f = formula                                   { Formula f }
+    | f = formula                                   { Formula (f,$symbolstartpos.pos_lnum) }
     | LBRACK; f = formula; COLON; p = proof RBRACK  { Frame (f,p) }
 
 formula: 
@@ -46,5 +47,5 @@ formula:
     | LPAREN; f = formula; RPAREN                   { f } 
     | s = VAR                                       { Lit s }
     | TRUE                                          { True }
-    | FALSE                                         { False };
+    | FALSE                                         { False }
 
