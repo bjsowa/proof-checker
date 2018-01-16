@@ -5,10 +5,9 @@ Program sprawdzający poprawność dowodów formuł logicznych w systemie deduk
 Wymagania
 ---------
 - Ocaml_, testowano na 4.05.0
-- Core_, testowano na 0.9.1
-- menhir_, testowano na 20171013
-- ocamlbuild, testowano na 0.11.0
-- GNU Make, testowano na 4.1
+- Core_, testowano na 0.10.0
+- menhir_, testowano na 20171222
+- ocamlbuild_, testowano na 0.12.0
 do odpalenia testów:
 
 - Python, testowano na 2.7.14
@@ -27,6 +26,7 @@ Jak używać
 ``./main.native [NAZWA_PLIKU]``
 
 .. _OCaml: http://caml.inria.fr
-.. _Core: https://opam.ocaml.org/packages/core/core.113.33.03/
-.. _menhir: https://opam.ocaml.org/packages/menhir/
-.. _cram: https://pypi.python.org/pypi/cram
+.. _Core: https://opam.ocaml.org/packages/core/core.v0.10.0/
+.. _menhir: https://opam.ocaml.org/packages/menhir/menhir.20171222/
+.. _cram: https://pypi.python.org/pypi/cram/0.7
+.. _ocamlbuild: https://opam.ocaml.org/packages/ocamlbuild/ocamlbuild.0.12.0/
