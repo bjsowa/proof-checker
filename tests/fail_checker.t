@@ -6,4 +6,4 @@
   goal test3: can't produce formula r (line 24)
   goal eq: not proved
   goal negimp: can't produce formula (p)=>(F) (line 58)
-  goal morgan: can't produce formula ~(~((~(p))\/(~(q)))) (line 83)
+  goal morgan: can't produce formula ~(~((~(p))\/(~(p)))) (line 83)
