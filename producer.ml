@@ -78,9 +78,6 @@ let raa form = match form with
 	| Imp(Neg(f),False) -> FormulaSet.singleton f
 	| _ -> FormulaSet.empty
 
-let negnegI form =
-	FormulaSet.singleton (Neg(Neg form))
-
 let produce premises form = 
 	FormulaSet.diff
 	(andE form $@
@@ -93,7 +90,6 @@ let produce premises form =
 	negE form $@
 	negI form $@
 	negnegE form $@
-	negnegI form $@
 	raa form)
 	premises
 
@@ -112,4 +108,6 @@ let check_introduction premises form =
 		FormulaSet.mem premises b
 	| Eq(a,b) -> a = b 				  (* eqI1 *)
 	| True -> true 					  (* trueI *)
+	| Neg(Neg(f)) -> 
+		FormulaSet.mem premises f 	  (* negnegI *)
 	| _ -> false
