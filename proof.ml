@@ -22,15 +22,41 @@ type proof =
 exception ProofError of formula * int
 exception FrameError
 
+
 module Formula : sig
 	type t = formula [@@deriving sexp]
 	include Comparable.S with type t := t
 end = struct
 	module T = struct
     	type t = formula [@@deriving sexp]
+
+    	let tag_to_int f = match f with
+			| Lit _ -> 0 | Neg _ -> 1
+			| And _ -> 2 | Or _  -> 3
+			| Imp _ -> 4 | Eq _  -> 5
+			| True  -> 6 | False -> 7
+
+    	let rec compare f1 f2 = match f1, f2 with
+    		| Lit x, Lit y -> Char.compare x y
+    		| Neg x, Neg y -> compare x y
+    		| Imp (x1,x2), Imp(y1,y2) ->
+    			let c = compare x1 y1 in 
+    			if c <> 0 then c 
+    			else compare x2 y2
+    		| And (x1,x2), And(y1,y2)
+    		| Or (x1,x2), Or(y1,y2)
+    		| Eq (x1,x2), Eq(y1,y2) ->
+    			let c = compare x1 y1 in
+    			if c <> 0 then
+    				let c = compare x1 y2 in
+    				if c <> 0 then c
+    				else compare x2 y1
+    			else compare x2 y2
+    		| _ -> Int.compare (tag_to_int f1) (tag_to_int f2)
+
   	end
   	include T
-  	include Comparable.Poly(T)
+  	include Comparable.Make(T)
 end
 
 module FormulaSet = Set.Make(Formula)
