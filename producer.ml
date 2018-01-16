@@ -82,7 +82,8 @@ let negnegI form =
 	FormulaSet.singleton (Neg(Neg form))
 
 let produce premises form = 
-	andE form $@
+	FormulaSet.diff
+	(andE form $@
 	impEl premises form $@
 	impEr premises form $@
 	orE premises form $@
@@ -93,7 +94,8 @@ let produce premises form =
 	negI form $@
 	negnegE form $@
 	negnegI form $@
-	raa form
+	raa form)
+	premises
 
 let check_introduction premises form = 
 	if FormulaSet.mem premises False  (* falseE *)

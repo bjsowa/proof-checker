@@ -1,1 +1,1 @@
-val check_proof : Proof.proof -> unit
+val check_proof : Proof.proof -> int option -> unit
