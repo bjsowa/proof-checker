@@ -32,4 +32,4 @@ let check_proof p = match p with
 		else printf "goal %s: not proved\n" name
 	with
 		ProofError (f,l) -> 
-			printf "goal %s: can't produce formula %a (line %d)\n" name formula_value f l
+			fprintf stderr "goal %s: can't produce formula %a (line %d)\n" name formula_value f l
