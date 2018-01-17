@@ -21,7 +21,6 @@ let () =
         Command.Spec.(empty 
             +> anon ("filename" %: file)
             +> flag "-parse" no_arg ~doc:"only print parsed proofs"
-            +> flag "-fill" (optional int) ~doc:"D fill")
+            +> flag "-fill" (optional int) ~doc:"D try to fill the gaps in proof. Consider only up to D formulas")
         main 
     |> Command.run
-    
