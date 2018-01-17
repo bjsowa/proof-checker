@@ -9,7 +9,7 @@ let andE form = match form with
 let impEl premises form = 
 	FormulaSet.filter_map premises
 		~f:(function 
-			| Imp(a,b) -> if a = form then Some b else None
+			| Imp(a,b) -> if Formula.compare a form = 0 then Some b else None
 			| _ -> None)
 
 let impEr premises form = match form with
@@ -26,13 +26,13 @@ let orE premises form = match form with
 		let imA = FormulaSet.filter_map premises
 			~f:(function
 				| Imp(c,d) -> 
-					if d = b then Some c else None
+					if Formula.compare d b = 0 then Some c else None
 				| _ -> None)
 		and orA = FormulaSet.filter_map premises
 			~f:(function
 				| Or(c,d) -> 
-					if c = a then Some d 
-					else if d = a then Some c
+					if Formula.compare c a = 0 then Some d 
+					else if Formula.compare d a = 0 then Some c
 					else None
 				| _ -> None) in
 		if not (FormulaSet.is_empty @@ FormulaSet.inter imA orA)
@@ -94,20 +94,20 @@ let produce premises form =
 	premises
 
 let check_introduction premises form = 
-	if FormulaSet.mem premises False  (* falseE *)
+	if FormulaSet.mem premises False  		(* falseE *)
 	then true else match form with
-	| And(a,b) ->					  (* andI *)
+	| And(a,b) ->					  	  	(* andI *)
 		FormulaSet.mem premises a &&
 		FormulaSet.mem premises b
 	| Or(a,b) -> 
-		(match (a,b) with			  (* magic *)
+		(match (a,b) with			  	  	(* magic *)
 		| (Neg f1, f2)
-		| (f1, Neg f2) -> f1 = f2
+		| (f1, Neg f2) -> Formula.compare f1 f2 = 0
 		| _ -> false) ||
-		FormulaSet.mem premises a ||  (* orI *)
+		FormulaSet.mem premises a ||  		(* orI *)
 		FormulaSet.mem premises b
-	| Eq(a,b) -> a = b 				  (* eqI1 *)
-	| True -> true 					  (* trueI *)
+	| Eq(a,b) -> Formula.compare a b = 0  	(* eqI1 *)
+	| True -> true 					  		(* trueI *)
 	| Neg(Neg(f)) -> 
-		FormulaSet.mem premises f 	  (* negnegI *)
+		FormulaSet.mem premises f 	  		(* negnegI *)
 	| _ -> false

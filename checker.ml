@@ -32,7 +32,7 @@ let check_proof p fill = match p with
 	{ name; goal; proof } -> 
 	try 
 		let res = frame FormulaSet.empty FormulaSet.empty proof in
-		if res = goal
+		if Formula.compare res goal = 0
 		then printf "goal %s: proved successfully\n" name
 		else eprintf "goal %s: not proved\n" name
 	with
