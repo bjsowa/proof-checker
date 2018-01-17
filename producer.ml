@@ -48,7 +48,7 @@ let eqE premises form = match form with
 let eqI premises form = match form with
 	| Imp(a,b) ->
 		if FormulaSet.mem premises (Imp(b,a))
-		then FormulaSet.of_list [Eq(a,b);Eq(b,a)]
+		then FormulaSet.singleton (Eq(a,b))
 		else FormulaSet.empty
 	| _ -> FormulaSet.empty
 
