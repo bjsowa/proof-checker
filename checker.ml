@@ -4,9 +4,50 @@ open Producer
 open Utilities
 
 let fill_production premises products goal = function
-	| Some x -> 
+	| Some depth -> (
 		printf "trying to fill production of formula %a\n" print_formula goal;
-		true
+
+		let rec print_production premises p =
+			let (form,prod) = p in
+			if prod = None then () else
+			let plist = (match prod with
+				| None -> failwith "this should not happen"
+				| Unary f1 -> [f1]
+				| Binary (f1,f2) -> [f1;f2]
+				| Ternary (f1,f2,f3) -> [f1;f2;f3]) in
+			List.iter plist (fun prod -> 
+				let f = FormulaSet.find premises 
+					~f:(fun p -> Formula.compare p (prod,None) = 0) in
+				(match f with
+					| None -> failwith "this should not happen"
+					| Some p -> print_production premises p
+				));
+			printf "%a\n" print_formula form in
+
+		let rec aux premises products fill =
+			if fill <= 0 
+			then 
+				let () = printf "filling production failed!\n" in
+				false 
+			else
+				let new_products = FormulaSet.fold ~init:FormulaSet.empty products 
+					~f:( fun acc (f,_) -> FormulaSet.union acc (produce premises f) ) in
+				let premises = FormulaSet.union premises products in
+				let new_products = FormulaSet.diff new_products premises in
+
+				let f = FormulaSet.find new_products ~f:( fun x -> Formula.compare x (goal,None) = 0 ) in
+
+				(
+					match f with
+					| Some p -> 
+						printf "successfully filled production:\n";
+						print_production premises p;
+						true
+					| None -> 
+						aux premises new_products (fill-1)
+				)
+
+		in aux premises products depth)
 	| None -> false
 
 let rec frame premises products fill = function
