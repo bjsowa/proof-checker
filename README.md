@@ -98,6 +98,20 @@ proof
 end.
 ```
 
+## Dostępne reguły dedukcji naturalnej
+
+TODO
+
+## Uzupełnianie dowodów
+
+Program ma opcję uzupełniania dowodów w przypadku, gdy nie można wyprodukować którejś przesłanki. Aby ją włączyć wystarczy uruchomić program z flagą `-fill [D]`. (przykład w teście `success_fill`).
+
+Wtedy w przypadku gdy nie można wyprodukować jakiejś przesłanki, program zacznie produkować nowe formuły do głębokości `D`. Jeśli napotka pożądaną przesłankę, odtworzy brakującą ścieżkę i będzie kontynuował sprawdzanie dowodu.
+
+**Ograniczenie**
+
+Uzupełnianie nie działa w przypadku, gdy dowód wymaga użycia ramek lub jednej z reguł: `andI`, `OrI`, `trueI`, `falseE`, `negnegI`, `magic`
+
 [ocaml]: http://caml.inria.fr
 [core]: https://opam.ocaml.org/packages/core/core.v0.10.0/
 [menhir]: https://opam.ocaml.org/packages/menhir/menhir.20171222/
