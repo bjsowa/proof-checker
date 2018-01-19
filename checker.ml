@@ -8,7 +8,7 @@ let fill_depth = ref None
 
 let fill_production premises products goal = match !fill_depth with
 	| Some depth -> (
-		printf "trying to fill production of formula %a\n" print_formula goal;
+		printf "goal %s: trying to fill production of formula %a\n" !goalname print_formula goal;
 
 		let rec print_production premises p =
 			let (form,prod) = p in
@@ -31,7 +31,7 @@ let fill_production premises products goal = match !fill_depth with
 		let rec aux premises products fill =
 			if fill <= 0 
 			then 
-				let () = printf "filling production failed!\n" in
+				let () = printf "goal %s: filling production failed!\n" !goalname in
 				false 
 			else
 				let new_products = FormulaSet.fold ~init:FormulaSet.empty products 
@@ -44,7 +44,7 @@ let fill_production premises products goal = match !fill_depth with
 				(
 					match f with
 					| Some p -> 
-						printf "successfully filled production:\n";
+						printf "goal %s: successfully filled production:\n" !goalname;
 						print_production premises p;
 						true
 					| None -> 
