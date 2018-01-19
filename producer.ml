@@ -16,7 +16,7 @@ let impEl premises form =
 
 let impEr premises form = match form with
 	| Imp(a,b) -> 
-		if FormulaSet.mem premises (a, None)
+		if FormulaSet.mem premises (a, NoParent)
 		then FormulaSet.singleton (b, Binary(form,a))
 		else FormulaSet.empty
 	| _ -> FormulaSet.empty
@@ -32,13 +32,13 @@ let orE premises form = match form with
 		let imA = FormulaSet.filter_map premises
 			~f:(function
 				| (Imp(c,d),_) -> 
-					if Formula.compare_formula d b = 0 then Some (c,None) else None
+					if Formula.compare_formula d b = 0 then Some (c,NoParent) else None
 				| _ -> None)
 		and orA = FormulaSet.filter_map premises
 			~f:(function
 				| (Or(c,d),_) -> 
-					if Formula.compare_formula c a = 0 then Some (d,None) 
-					else if Formula.compare_formula d a = 0 then Some (c,None)
+					if Formula.compare_formula c a = 0 then Some (d,NoParent) 
+					else if Formula.compare_formula d a = 0 then Some (c,NoParent)
 					else None
 				| _ -> None) in
 		let p = FormulaSet.inter imA orA in
@@ -53,17 +53,17 @@ let eqE premises form = match form with
 
 let eqI premises form = match form with
 	| Imp(a,b) ->
-		if FormulaSet.mem premises (Imp(b,a), None)
+		if FormulaSet.mem premises (Imp(b,a),NoParent)
 		then FormulaSet.singleton (Eq(a,b), Binary(form, Imp(b,a)))
 		else FormulaSet.empty
 	| _ -> FormulaSet.empty
 
 let falseI premises form = 
-	if FormulaSet.mem premises (Neg(form), None)
+	if FormulaSet.mem premises (Neg(form),NoParent)
 	then FormulaSet.singleton (False, Binary(form, Neg(form)))
 	else match form with
 		| Neg(f) -> 
-			if FormulaSet.mem premises (f,None)
+			if FormulaSet.mem premises (f,NoParent)
 			then FormulaSet.singleton (False, Binary(form,f))
 			else FormulaSet.empty
 		| _ -> FormulaSet.empty
@@ -100,20 +100,20 @@ let produce premises form =
 	premises
 
 let check_introduction premises form = 
-	if FormulaSet.mem premises (False, None)  		(* falseE *)
+	if FormulaSet.mem premises (False,NoParent)  		(* falseE *)
 	then true else match form with
 	| And(a,b) ->					  	  			(* andI *)
-		FormulaSet.mem premises (a,None) &&
-		FormulaSet.mem premises (b,None)
+		FormulaSet.mem premises (a,NoParent) &&
+		FormulaSet.mem premises (b,NoParent)
 	| Or(a,b) -> 
 		(match (a,b) with			  	  			(* magic *)
 		| (Neg f1, f2)
 		| (f1, Neg f2) -> Formula.compare_formula f1 f2 = 0
 		| _ -> false) ||
-		FormulaSet.mem premises (a,None) ||  		(* orI *)
-		FormulaSet.mem premises (b,None)
+		FormulaSet.mem premises (a,NoParent) ||  		(* orI *)
+		FormulaSet.mem premises (b,NoParent)
 	| Eq(a,b) -> Formula.compare_formula a b = 0  	(* eqI1 *)
 	| True -> true 					  				(* trueI *)
 	| Neg(Neg(f)) -> 
-		FormulaSet.mem premises (f,None)			(* negnegI *)
+		FormulaSet.mem premises (f,NoParent)			(* negnegI *)
 	| _ -> false

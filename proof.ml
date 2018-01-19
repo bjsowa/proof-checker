@@ -11,7 +11,7 @@ type formula =
 [@@deriving sexp]
 
 type parent = 
-    | None
+    | NoParent
     | Frame
     | Unary of formula
     | Binary of formula * formula
