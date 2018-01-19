@@ -12,6 +12,7 @@ type formula =
 
 type parent = 
     | None
+    | Frame
     | Unary of formula
     | Binary of formula * formula
     | Ternary of formula * formula * formula

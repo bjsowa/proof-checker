@@ -12,6 +12,7 @@ let fill_production premises products goal = function
 			if prod = None then () else
 			let plist = (match prod with
 				| None -> failwith "this should not happen"
+				| Frame -> []
 				| Unary f1 -> [f1]
 				| Binary (f1,f2) -> [f1;f2]
 				| Ternary (f1,f2,f3) -> [f1;f2;f3]) in
@@ -75,7 +76,7 @@ let rec frame premises products fill = function
 			((FormulaSet.remove products (f,None)) $@ (produce premises f)) 
 			fill p in
 		let newf = Imp(f,goal) in
-		frame premises (FormulaSet.add products (newf,None)) fill t
+		frame premises (FormulaSet.add products (newf,Frame)) fill t
 	| _ -> raise FrameError
 
 let check_proof p fill = match p with
