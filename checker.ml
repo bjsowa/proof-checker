@@ -34,11 +34,18 @@ let fill_production premises products goal = match !fill_depth with
 				let () = printf "goal %s: filling production failed!\n" !goalname in
 				false 
 			else
+				let premises = FormulaSet.union premises products in
 				let new_products = FormulaSet.fold ~init:FormulaSet.empty products 
 					~f:( fun acc (f,_) -> FormulaSet.union acc (produce premises f) ) in
-				let premises = FormulaSet.union premises products in
 				let new_products = FormulaSet.diff new_products premises in
 
+(* 				printf "premises:\n";
+				FormulaSet.iter premises ~f:(fun (f,_) -> printf "%a\n" print_formula f);
+				printf "products:\n";
+				FormulaSet.iter products ~f:(fun (f,_) -> printf "%a\n" print_formula f);
+				printf "new products:\n";
+				FormulaSet.iter new_products ~f:(fun (f,_) -> printf "%a\n" print_formula f);
+ *)
 				let f = FormulaSet.find new_products ~f:( fun x -> Formula.compare x (goal,NoParent) = 0 ) in
 
 				(
