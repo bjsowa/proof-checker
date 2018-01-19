@@ -25,23 +25,25 @@ let orE premises form = match form with
 	| Or(a,b) ->
 		let imA = impEl premises a 
 		and imB = impEl premises b in
-		FormulaSet.inter imA imB
-(* 	| Imp(a,b) ->
+		let p = FormulaSet.inter imA imB in
+		FormulaSet.map p ~f:(fun (f,_) ->
+			( f, Ternary(form, Imp(a,f), Imp(b,f)) ))
+	| Imp(a,b) ->
 		let imA = FormulaSet.filter_map premises
 			~f:(function
-				| Imp(c,d) -> 
-					if Formula.compare d b = 0 then Some c else None
+				| (Imp(c,d),_) -> 
+					if Formula.compare_formula d b = 0 then Some (c,None) else None
 				| _ -> None)
 		and orA = FormulaSet.filter_map premises
 			~f:(function
-				| Or(c,d) -> 
-					if Formula.compare c a = 0 then Some d 
-					else if Formula.compare d a = 0 then Some c
+				| (Or(c,d),_) -> 
+					if Formula.compare_formula c a = 0 then Some (d,None) 
+					else if Formula.compare_formula d a = 0 then Some (c,None)
 					else None
 				| _ -> None) in
-		if not (FormulaSet.is_empty @@ FormulaSet.inter imA orA)
-		then FormulaSet.singleton b
-		else FormulaSet.empty *)
+		let p = FormulaSet.inter imA orA in
+		FormulaSet.map p ~f:(fun (f,_) ->
+			( b, Ternary(Or(a,f), form, Imp(f,b))))
 	| _ -> FormulaSet.empty
 
 let eqE premises form = match form with
