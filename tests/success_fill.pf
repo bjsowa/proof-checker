@@ -1,0 +1,60 @@
+goal test1: A /\ (A => B) => B
+proof
+  [ A /\ (A => B) :
+
+    B ];
+  A /\ (A => B) => B
+end.
+
+goal eq: (p /\ q => r) <=> (p => q => r)
+proof
+  [ p /\ q => r :
+    [ p :
+      [ q :
+        p /\ q;
+        r];
+      q => r];
+    p => q => r];
+  (p /\ q => r) => (p => q => r);
+  [ p => q => r :
+    [ p /\ q :
+
+      r ];
+    p /\ q => r];
+  (p => q => r) => (p /\ q => r);
+  (p /\ q => r) <=> (p => q => r)
+end.
+
+goal negimp: (p => q) /\ ~q => ~p
+proof
+  [ (p => q) /\ ~q :
+
+    q => F;
+    [ p :
+      q;
+      F ];
+
+    ~p ];
+  (p => q) /\ ~q => ~p
+end.
+
+goal morgan: ~(p /\ q) => ~q \/ ~p
+proof
+  [ ~(p /\ q) :
+    [ ~(~q \/ ~p) :
+      [ ~q :
+        ~q \/ ~p;
+        F];
+
+      q;
+      [ ~p :
+        ~q \/ ~p;
+        F];
+
+      p;
+      p /\ q;
+      F];
+
+    ~q \/ ~p ];
+  ~(p /\ q) => ~q \/ ~p
+end.
